@@ -43,7 +43,7 @@ let chooseDept = () => {
             ],
             pageSize: 7
         })
-        .then(function(answer) {
+        .then((answer) => {
 
             //////////  using a switch statement to run a specific function based on user's selection
             switch (answer.dept) {
@@ -84,12 +84,11 @@ let navigate = () => {
             pageSize: 7,
             prefix: ""
         })
-        .then(function(answer) {
+        .then((answer) => {
 
             switch (answer.confirm) {
                 case "Purchase inventory":
-                    // purchase();
-                    console.log("TESTING purchase();");
+                    purchase();
                     break;
                 case "Choose department":
                     chooseDept();
@@ -110,7 +109,7 @@ const table = new Table({
 
 
 //////////  function to view all inventory sorted by department
-let viewAll = () => {
+let viewAll = (answer) => {
 
     //////////  SQL SELECT command to query inventory data
     var query = "SELECT * FROM products ORDER BY department_name, item_id";
@@ -184,5 +183,10 @@ let viewDairy = (answer) => {
         }
         console.log('\n' + table.toString() + '\n\n\n');
     });
+    navigate();
+}
+
+let purchase = () => {
+    console.log("TESTING purchase();");
     navigate();
 }
