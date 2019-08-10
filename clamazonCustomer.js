@@ -23,7 +23,7 @@ connection.connect((err) => {
 
 
 //////////  function asking user to select inventory by department
-const chooseDept = (auth, answer) => {
+const chooseDept = () => {
 
     //////////  using inquirer to obtain user input
     inquirer
@@ -110,7 +110,7 @@ const table = new Table({
 
 
 //////////  function to view all inventory sorted by department
-let viewAll = (auth) => {
+let viewAll = () => {
 
     //////////  Emptying table contents but keeping the header.
     table.length = 0;
