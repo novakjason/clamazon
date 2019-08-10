@@ -69,7 +69,7 @@ let chooseDept = () => {
 
 
 //////////  navigation for the user between inventory views
-let navigate = (res) => {
+let navigate = res => {
     inquirer
         .prompt({
             type: "list",
@@ -218,10 +218,17 @@ let purchase = (res) => {
                             if ((res[j].stock - answer.quantity) >= 0) {
 
                                 //////////  updating the mysql clamazonDB database with the new stock quantity if purchase was successful
-                                connection.query("UPDATE products SET stock='" + (res[j].stock - answer.quantity) + "' WHERE item_id='" + itemID + "'", (err, res) => {
+                                connection.query("UPDATE products SET stock='" + (res[j].stock - answer.quantity) + "' WHERE item_id='" + itemID + "'", (err, result) => {
                                     if (err) throw err;
 
-                                    console.log("Your purchase has been made.");
+                                    console.log(`
+    Your purchase has been made.
+    Cost: ${res[j].price * answer.quantity}
+                                    
+                                    
+                                    
+                                                           
+                                    `);
 
                                     //////////  restarting application if purchase was successful
                                     chooseDept();
