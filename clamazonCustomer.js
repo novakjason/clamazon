@@ -1,7 +1,7 @@
 //////////  node modules
 const Table = require('cli-table');
 const mysql = require('mysql');
-var inquirer = require('inquirer');
+const inquirer = require('inquirer');
 const connection = require('./connection');
 
 
@@ -23,7 +23,7 @@ connection.connect((err) => {
 
 
 //////////  function asking user to select inventory by department
-const chooseDept = () => {
+let chooseDept = () => {
 
     //////////  using inquirer to obtain user input
     inquirer
@@ -68,7 +68,7 @@ const chooseDept = () => {
 
 
 //////////  navigation for the user between inventory views
-function navigate() {
+let navigate = () => {
     inquirer
         .prompt({
             type: "list",
