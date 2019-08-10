@@ -1,7 +1,7 @@
 //////////  node modules
 const Table = require('cli-table');
 const mysql = require('mysql');
-const inquirer = require('inquirer');
+var inquirer = require('inquirer');
 const connection = require('./connection');
 
 
@@ -59,12 +59,48 @@ const chooseDept = (auth, answer) => {
                 case "Dairy":
                     viewDairy();
                     break;
-                case "exit":
+                case "Exit":
                     connection.end();
                     break;
             }
         });
 }
+
+
+//////////  navigation for the user between inventory views
+function navigate() {
+    inquirer
+        .prompt({
+            type: "list",
+            name: "confirm",
+            message: "Please choose from the following options: \n",
+            choices: [
+                "Purchase inventory",
+                new inquirer.Separator(),
+                "Choose department",
+                new inquirer.Separator(),
+                "Exit\n"
+            ],
+            pageSize: 7,
+            prefix: ""
+        })
+        .then(function(answer) {
+
+            switch (answer.confirm) {
+                case "Purchase inventory":
+                    // purchase();
+                    console.log("TESTING purchase();");
+                    break;
+                case "Choose department":
+                    chooseDept();
+                    break;
+                case "Exit":
+                    connection.end();
+                    break;
+            }
+        });
+}
+
 
 //////////  using cli-table to create a pretty table to display product inventory
 const table = new Table({
@@ -75,6 +111,9 @@ const table = new Table({
 
 //////////  function to view all inventory sorted by department
 let viewAll = (auth) => {
+
+    //////////  Emptying table contents but keeping the header.
+    table.length = 0;
 
     //////////  SQL SELECT command to query inventory data
     var query = "SELECT * FROM products ORDER BY department_name, item_id";
@@ -89,6 +128,8 @@ let viewAll = (auth) => {
             );
         }
         //////////  displaying newly filled table in the cli
-        console.log(table.toString());
+        console.log('\n' + table.toString() + '\n\n\n');
     });
+
+    navigate();
 }
