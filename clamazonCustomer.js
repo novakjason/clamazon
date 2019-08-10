@@ -1,8 +1,8 @@
 //////////  node modules
+const Table = require('cli-table');
 const mysql = require('mysql');
 const inquirer = require('inquirer');
 const connection = require('./connection');
-const Table = require('cli-table');
 
 
 //////////  mysql connection function using connection.js file initiates when application loads
@@ -50,22 +50,45 @@ const chooseDept = (auth, answer) => {
                 case "All":
                     viewAll();
                     break;
-
                 case "Produce":
                     viewProduce();
                     break;
-
                 case "Bakery":
                     viewBakery();
                     break;
-
                 case "Dairy":
                     viewDairy();
                     break;
-
                 case "exit":
                     connection.end();
                     break;
             }
         });
+}
+
+//////////  using cli-table to create a pretty table to display product inventory
+const table = new Table({
+    head: ['ITEM ID', 'DEPARTMENT', 'PRODUCT NAME', 'PRICE/CASE', 'STOCK'],
+    colWidths: [10, 20, 30, 15, 10]
+});
+
+
+//////////  function to view all inventory sorted by department
+let viewAll = (auth) => {
+
+    //////////  SQL SELECT command to query inventory data
+    var query = "SELECT * FROM products ORDER BY department_name, item_id";
+
+    //////////  performing mysql query
+    connection.query(query, (err, res) => {
+
+        //////////  for loop to push each row of data into cli table
+        for (var i = 0; i < res.length; i++) {
+            table.push(
+                [res[i].item_id, res[i].department_name, res[i].product_name, res[i].price, res[i].stock]
+            );
+        }
+        //////////  displaying newly filled table in the cli
+        console.log(table.toString());
+    });
 }
