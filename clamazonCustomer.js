@@ -108,11 +108,8 @@ const table = new Table({
 });
 
 
-//////////  function to view all inventory sorted by department
-let viewAll = (answer) => {
-
-    //////////  SQL SELECT command to query inventory data
-    var query = "SELECT * FROM products ORDER BY department_name, item_id";
+//////////  function to fill the new table with data from mysql database
+let newTable = (query, answer) => {
 
     //////////  Emptying table contents but keeping the header.
     table.length = 0;
@@ -132,57 +129,38 @@ let viewAll = (answer) => {
         //////////  displaying newly filled table in the cli
         console.log('\n' + table.toString() + '\n\n\n');
     });
-    navigate();
 }
 
 
-//////////  function to view Produce inventory
+//////////  function to view all inventory sorted by department
+let viewAll = (answer) => {
+
+    //////////  SQL SELECT command to query inventory data
+    let query = "SELECT * FROM products ORDER BY department_name, item_id";
+
+    newTable(query, answer);
+    navigate();
+}
+
+let deptQuery = "SELECT * FROM products WHERE department_name = ?";
+
 let viewProduce = (answer) => {
-    var query = "SELECT * FROM products WHERE department_name = ?";
-    table.length = 0;
-    connection.query(query, [answer.dept], (err, res) => {
-        if (err) throw err;
-        for (var i = 0; i < res.length; i++) {
-            table.push(
-                [res[i].item_id, res[i].department_name, res[i].product_name, res[i].price, res[i].stock]
-            );
-        }
-        console.log('\n' + table.toString() + '\n\n\n');
-    });
+    let query = deptQuery;
+    newTable(query, answer);
     navigate();
 }
 
 
-//////////  function to view Bakery inventory
 let viewBakery = (answer) => {
-    var query = "SELECT * FROM products WHERE department_name = ?";
-    table.length = 0;
-    connection.query(query, [answer.dept], (err, res) => {
-        if (err) throw err;
-        for (var i = 0; i < res.length; i++) {
-            table.push(
-                [res[i].item_id, res[i].department_name, res[i].product_name, res[i].price, res[i].stock]
-            );
-        }
-        console.log('\n' + table.toString() + '\n\n\n');
-    });
+    let query = deptQuery;
+    newTable(query, answer);
     navigate();
 }
 
 
-//////////  function to view Dairy inventory
 let viewDairy = (answer) => {
-    var query = "SELECT * FROM products WHERE department_name = ?";
-    table.length = 0;
-    connection.query(query, [answer.dept], (err, res) => {
-        if (err) throw err;
-        for (var i = 0; i < res.length; i++) {
-            table.push(
-                [res[i].item_id, res[i].department_name, res[i].product_name, res[i].price, res[i].stock]
-            );
-        }
-        console.log('\n' + table.toString() + '\n\n\n');
-    });
+    let query = deptQuery;
+    newTable(query, answer);
     navigate();
 }
 
