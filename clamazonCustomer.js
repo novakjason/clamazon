@@ -34,10 +34,7 @@ let chooseDept = () => {
             default: "All",
             choices: [
                 new inquirer.Separator(),
-                {
-                    name: "All",
-                    value: "Produce, Bakery, Dairy"
-                },
+                "All",
                 "Produce",
                 "Bakery",
                 "Dairy",
