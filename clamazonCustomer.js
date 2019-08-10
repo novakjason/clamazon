@@ -34,7 +34,10 @@ let chooseDept = () => {
             default: "All",
             choices: [
                 new inquirer.Separator(),
-                "All",
+                {
+                    name: "All",
+                    value: "Produce, Bakery, Dairy"
+                },
                 "Produce",
                 "Bakery",
                 "Dairy",
@@ -48,16 +51,16 @@ let chooseDept = () => {
             //////////  using a switch statement to run a specific function based on user's selection
             switch (answer.dept) {
                 case "All":
-                    viewAll();
+                    viewAll(answer);
                     break;
                 case "Produce":
-                    viewProduce();
+                    viewProduce(answer);
                     break;
                 case "Bakery":
-                    viewBakery();
+                    viewBakery(answer);
                     break;
                 case "Dairy":
-                    viewDairy();
+                    viewDairy(answer);
                     break;
                 case "Exit":
                     connection.end();
@@ -73,7 +76,7 @@ let navigate = () => {
         .prompt({
             type: "list",
             name: "confirm",
-            message: "Please choose from the following options: \n",
+            message: "\n\nPlease choose from the following options:     ",
             choices: [
                 "Purchase inventory",
                 new inquirer.Separator(),
@@ -112,14 +115,17 @@ const table = new Table({
 //////////  function to view all inventory sorted by department
 let viewAll = () => {
 
-    //////////  Emptying table contents but keeping the header.
-    table.length = 0;
-
     //////////  SQL SELECT command to query inventory data
     var query = "SELECT * FROM products ORDER BY department_name, item_id";
 
+    //////////  Emptying table contents but keeping the header.
+    table.length = 0;
+
     //////////  performing mysql query
-    connection.query(query, (err, res) => {
+    connection.query(query, [answer.dept], (err, res) => {
+
+        //////////  displaying error if it exists
+        if (err) throw err;
 
         //////////  for loop to push each row of data into cli table
         for (var i = 0; i < res.length; i++) {
@@ -130,6 +136,56 @@ let viewAll = () => {
         //////////  displaying newly filled table in the cli
         console.log('\n' + table.toString() + '\n\n\n');
     });
+    navigate();
+}
 
+
+//////////  function to view Produce inventory
+let viewProduce = (answer) => {
+    var query = "SELECT * FROM products WHERE department_name = ?";
+    table.length = 0;
+    connection.query(query, [answer.dept], (err, res) => {
+        if (err) throw err;
+        for (var i = 0; i < res.length; i++) {
+            table.push(
+                [res[i].item_id, res[i].department_name, res[i].product_name, res[i].price, res[i].stock]
+            );
+        }
+        console.log('\n' + table.toString() + '\n\n\n');
+    });
+    navigate();
+}
+
+
+//////////  function to view Bakery inventory
+let viewBakery = (answer) => {
+    var query = "SELECT * FROM products WHERE department_name = ?";
+    table.length = 0;
+    connection.query(query, [answer.dept], (err, res) => {
+        if (err) throw err;
+        for (var i = 0; i < res.length; i++) {
+            table.push(
+                [res[i].item_id, res[i].department_name, res[i].product_name, res[i].price, res[i].stock]
+            );
+        }
+        console.log('\n' + table.toString() + '\n\n\n');
+    });
+    navigate();
+}
+
+
+//////////  function to view Dairy inventory
+let viewDairy = (answer) => {
+    var query = "SELECT * FROM products WHERE department_name = ?";
+    table.length = 0;
+    connection.query(query, [answer.dept], (err, res) => {
+        if (err) throw err;
+        for (var i = 0; i < res.length; i++) {
+            table.push(
+                [res[i].item_id, res[i].department_name, res[i].product_name, res[i].price, res[i].stock]
+            );
+        }
+        console.log('\n' + table.toString() + '\n\n\n');
+    });
     navigate();
 }
