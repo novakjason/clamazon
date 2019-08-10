@@ -20,8 +20,7 @@ connection.connect(err => {
          ╚██████╗███████╗██║  ██║██║ ╚═╝ ██║██║  ██║███████╗╚██████╔╝██║ ╚████║
           ╚═════╝╚══════╝╚═╝  ╚═╝╚═╝     ╚═╝╚═╝  ╚═╝╚══════╝ ╚═════╝ ╚═╝  ╚═══╝
           
-                 
-          `);
+`);
 
     //  initiating first user interface with clamazon
     chooseDept();
@@ -37,7 +36,9 @@ let chooseDept = () => {
 
             type: "list",
             name: "dept",
-            message: "Select a department to view products.",
+            message: `Select a department to view products.
+
+`,
             default: "All",
             choices: [
                 new inquirer.Separator(),
@@ -68,12 +69,8 @@ let chooseDept = () => {
                     break;
                 case "Exit":
                     console.log(`
-                    
-                    
     Thank you for shopping at Clamazon!
-                    
-                    
-                    `);
+`);
                     connection.end();
                     break;
             }
@@ -87,7 +84,9 @@ let navigate = res => {
         .prompt({
             type: "list",
             name: "confirm",
-            message: `Please choose from the following options:     `,
+            message: `Please choose from the following options:     
+            
+`,
             choices: [
                 new inquirer.Separator(),
                 "Purchase inventory",
@@ -108,7 +107,10 @@ let navigate = res => {
                     chooseDept();
                     break;
                 case "Exit":
-                    console.log("Thank you for shopping at Clamazon!")
+                    console.log(`
+    Thank you for shopping at Clamazon!
+
+`);
                     connection.end();
                     break;
             }
@@ -142,7 +144,10 @@ let newTable = (query, answer, res) => {
             );
         }
         //  displaying newly filled table in the cli
-        console.log('\n' + table.toString() + '\n\n\n');
+        console.log(`
+${table.toString()}
+        
+`);
 
         //  calling the navigate function and passing through the mysql database query response
         navigate(res);
@@ -248,12 +253,10 @@ let purchase = res => {
                                 })
                             } else {
                                 console.log(`
-                                
+                              WARNING!        
                                 
     Insufficient stock available.  Please select a smaller quantity.
-                            
-                                
-                                `);
+`);
 
                                 //  restarting purchase function if stock is not available for user
                                 purchase(res);
